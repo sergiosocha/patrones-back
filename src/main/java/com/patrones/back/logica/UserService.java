@@ -20,6 +20,7 @@ public class UserService {
     public boolean guardarUser(String nombre){
         UserORM nuevoUser = new UserORM();
         nuevoUser.setNombre(nombre);
+        userJPA.save(nuevoUser);
         return  true;
     }
 
