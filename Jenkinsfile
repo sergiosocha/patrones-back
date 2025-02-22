@@ -30,7 +30,7 @@ pipeline {
 
                 withCredentials([usernamePassword(credentialsId: 'Dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh "docker login -u $DOCKER_USER -p $DOCKER_PASSWORD"
-                    sh 'docker push sergioss21/patrones-api'
+                    sh 'docker push sergios21/patrones-api'
                 }
             }
         }
@@ -40,7 +40,7 @@ pipeline {
 
                 sh """
                 yq eval '.image.tag = "latest"' -i helm/patrones-back/values.yaml
-                yq eval '.image.repository = "sergioss21/patrones-api"' -i helm/patrones-back/values.yaml
+                yq eval '.image.repository = "sergios21/patrones-api"' -i helm/patrones-back/values.yaml
                 """
             }
         }
