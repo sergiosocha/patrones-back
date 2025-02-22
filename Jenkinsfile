@@ -39,7 +39,8 @@ pipeline {
         stage('Checkout Helm Chart') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'HelmRepoCreds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    sh 'git clone https://github.com/sergiosocha/api-chart.git'
+                    sh 'rm -rf api-chart'
+                    sh 'git clone https://${USERNAME}:${PASSWORD}@github.com/sergiosocha/api-chart.git'
                 }
             }
         }
