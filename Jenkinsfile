@@ -4,15 +4,6 @@ pipeline {
     environment {
         GIT_CREDENTIALS_ID = 'tu-credencial-id'
     }
-    stages {
-        stage('Checkout') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: env.GIT_CREDENTIALS_ID, usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
-                    sh 'git clone https://$GIT_USER:$GIT_PASS@github.com/sergiosocha/patrones-back.git'
-                }
-            }
-        }
-    }
     
     stages {
         stage('Checkout') {
