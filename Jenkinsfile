@@ -6,12 +6,13 @@ pipeline {
     }
     
     stages {
-        stage('Checkout') {
+         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/sergiosocha/patrones-back.git'
+                withCredentials([usernamePassword(credentialsId: env.GIT_CREDENTIALS_ID, usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                    sh 'git clone https://$GIT_USER:$GIT_PASS@github.com/sergiosocha/patrones-back.git'
+                }
             }
         }
-
         stage('Build') {
             steps {
                 sh 'chmod +x ./gradlew'
