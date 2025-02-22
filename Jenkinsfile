@@ -6,11 +6,14 @@ pipeline {
     }
     
     stages {
-         stage('Checkout') {
+        stage('Checkout Application') {
             steps {
-                git branch: 'main', url: 'https://github.com/sergiosocha/patrones-back.git'
+                git branch: 'main',
+                    credentialsId: 'github-token',
+                    url: 'https://github.com/sergiosocha/patrones-back.git'
             }
         }
+
         stage('Build') {
             steps {
                 sh 'chmod +x ./gradlew'
@@ -20,14 +23,12 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-
                 sh 'docker build -t sergios21/patrones-api .'
             }
         }
 
         stage('Push Docker Image') {
             steps {
-
                 withCredentials([usernamePassword(credentialsId: 'Dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh "docker login -u $DOCKER_USER -p $DOCKER_PASSWORD"
                     sh 'docker push sergios21/patrones-api'
@@ -35,48 +36,54 @@ pipeline {
             }
         }
 
+        stage('Checkout Helm Chart') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'HelmRepoCreds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh 'git clone https://${USERNAME}:${PASSWORD}@github.com/sergiosocha/api-chart.git'
+                }
+            }
+        }
+
+
         stage('Update Helm Chart') {
             steps {
-
                 sh """
-                yq eval '.image.tag = "latest"' -i helm/patrones-back/values.yaml
-                yq eval '.image.repository = "sergios21/patrones-api"' -i helm/patrones-back/values.yaml
+                  yq eval '.image.repository = "sergios21/patrones-api"' -i values.yaml
+                  yq eval '.image.tag = "latest"' -i values.yaml
                 """
             }
         }
 
         stage('Package Helm Chart') {
             steps {
-
-                sh 'helm package helm/patrones-back'
+                sh 'helm package .'
             }
         }
 
         stage('Push Helm Chart') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'HelmRepoCreds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    sh """
-                    curl -u ${USERNAME}:${PASSWORD} --upload-file patrones-back-*.tgz https://github.com/sergiosocha/api-chart-tgz
-                    """
+                    sh '''
+                      curl -u ${USERNAME}:${PASSWORD} \
+                           --upload-file *.tgz \
+                           https://github.com/sergiosocha/api-chart-tgz
+                    '''
                 }
             }
         }
 
         stage('Update ArgoCD Manifest') {
             steps {
-
-                git branch: 'main', credentialsId: 'GitHubCreds', url: 'https://github.com/sergiosocha/api-chart.git'
-
-
-                sh """
-                yq eval '.spec.template.spec.containers[0].image = "sergioss21/patrones-api:latest"' -i deployment.yaml
-                """
-
-                sh """
-                git add deployment.yaml
-                git commit -m "Update Argo manifest with latest image"
-                git push origin main
-                """
+                git branch: 'main',
+                    credentialsId: 'GitHubCreds',
+                    url: 'https://github.com/sergiosocha/api-chart.git'
+                
+                sh '''
+                  yq eval '.spec.template.spec.containers[0].image = "sergios21/patrones-api:latest"' -i deployment.yaml
+                  git add deployment.yaml
+                  git commit -m "Update Argo manifest with latest image"
+                  git push origin main
+                '''
             }
         }
     }
