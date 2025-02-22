@@ -63,9 +63,7 @@ pipeline {
 
         stage('Package Helm Chart') {
             steps {
-                dir('api-chart') {
-                    sh 'docker run --rm -v "$(pwd)":/workdir lachlanevenson/k8s-helm  package .'
-                }
+                sh 'docker run --rm -v "$(pwd)/api-chart":/workdir lachlanevenson/k8s-helm helm package .'
             }
         }
 
