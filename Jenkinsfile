@@ -59,6 +59,20 @@ pipeline {
             }
         }
 
+        stage('Install Helm') {
+            steps {
+                sh '''
+                  if ! command -v helm >/dev/null 2>&1; then
+                    wget https://get.helm.sh/helm-v3.11.2-linux-amd64.tar.gz
+                    tar -zxvf helm-v3.11.2-linux-amd64.tar.gz
+                    cp linux-amd64/helm ./helm
+                    chmod +x ./helm
+                  fi
+                '''
+            }
+        }
+
+
 
 
         stage('Package Helm Chart') {
