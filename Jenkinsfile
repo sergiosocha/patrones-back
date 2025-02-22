@@ -79,11 +79,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-
-            sh 'docker rmi sergioss21/patrones-api'
-        }
-    }
 }
