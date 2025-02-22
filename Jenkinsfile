@@ -100,7 +100,7 @@ pipeline {
         }
 
 
-        stage('Update ArgoCD Manifest') {
+        /*stage('Update ArgoCD Manifest') {
             steps {
                 git branch: 'main',
                     credentialsId: 'GitHubCreds',
@@ -113,6 +113,6 @@ pipeline {
                   git push origin main
                 '''
             }
-        }
+        }*/
     }
 }
