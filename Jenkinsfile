@@ -86,14 +86,14 @@ pipeline {
                         sh 'rm -rf helm-repo'
                         sh 'git clone https://github.com/sergiosocha/api-chart-tgz.git helm-repo'
         
-                        sh 'cp *.tgz helm-repo/charts/'
-        
-                        sh '''
-                          cd ../..
+                         cp api-chart-0.1.0.tgz helm-repo/charts/
+                        
+                          # Moverte dentro del repositorio clonado
+                          cd helm-repo
+                                               
                           git add .
-                          git commit -m "Actualiza chart.tgz"
+                          git commit -m "Actualiza Chart"
                           git push
-                        '''
                     }
                 }
             }
