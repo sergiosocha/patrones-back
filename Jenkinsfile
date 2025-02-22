@@ -54,7 +54,6 @@ pipeline {
 
         stage('Push Helm Chart') {
             steps {
-
                 withCredentials([usernamePassword(credentialsId: 'HelmRepoCreds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh """
                     curl -u ${USERNAME}:${PASSWORD} --upload-file patrones-back-*.tgz https://github.com/sergiosocha/api-chart-tgz
