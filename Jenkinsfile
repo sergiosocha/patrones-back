@@ -8,9 +8,7 @@ pipeline {
     stages {
          stage('Checkout') {
             steps {
-                withCredentials([usernamePassword(credentialsId: env.GIT_CREDENTIALS_ID, usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
-                    sh 'git clone https://$GIT_USER:$GIT_PASS@github.com/sergiosocha/patrones-back.git'
-                }
+                git branch: 'main', url: 'https://github.com/sergiosocha/patrones-back.git'
             }
         }
         stage('Build') {
