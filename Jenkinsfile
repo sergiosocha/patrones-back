@@ -89,7 +89,7 @@ pipeline {
                           cd helm-repo
                           git config user.name "CristianSz2003"
                           git config user.email "cristanchos2003@gmail.com"
-                          git config credential.helper '!f() { echo "username=${USERNAME}"; echo "password=${PASSWORD}"; }; f'
+                          git config credential.helper '!f() { echo "username=x-access-token"; echo "password=${PASSWORD}"; }; f'
                           git add .
                           git commit -m "Actualiza Chart"
                           git push
