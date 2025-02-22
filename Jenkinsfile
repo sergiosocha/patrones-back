@@ -88,6 +88,8 @@ pipeline {
                           git clone https://github.com/sergiosocha/api-chart-tgz.git helm-repo
                           cp "api-chart-0.1.0.tgz" helm-repo/charts/
                           cd helm-repo
+                          git config user.name "CristianSz2003"
+                          git config user.email "cristanchos2003@gmail.com"
                           git add .
                           git commit -m "Actualiza Chart"
                           git push
