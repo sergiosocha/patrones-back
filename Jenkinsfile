@@ -21,7 +21,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
 
-                sh 'docker build -t sergioss21/patrones-api .'
+                sh 'docker build -t sergios21/patrones-api .'
             }
         }
 
