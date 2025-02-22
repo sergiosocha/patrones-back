@@ -49,13 +49,16 @@ pipeline {
         stage('Update Helm Chart') {
             steps {
                 dir('api-chart') {
+                   
+                    sh 'chmod 666 values.yaml'
                     sh '''
-                    docker run --rm -v "$(pwd)":/workdir mikefarah/yq eval '.image.repository = "sergios21/patrones-api"' -i values.yaml
-                    docker run --rm -v "$(pwd)":/workdir mikefarah/yq eval '.image.tag = "latest"' -i values.yaml
+                      docker run --rm -v "$(pwd)":/workdir mikefarah/yq eval '.image.repository = "sergios21/patrones-api"' -i values.yaml
+                      docker run --rm -v "$(pwd)":/workdir mikefarah/yq eval '.image.tag = "latest"' -i values.yaml
                     '''
                 }
             }
         }
+
 
 
         stage('Package Helm Chart') {
