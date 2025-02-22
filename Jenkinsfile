@@ -23,8 +23,8 @@ pipeline {
 
         stage('Build') {
             steps {
-
-                sh 'mvn clean install'
+                sh 'chmod +x ./gradlew'
+                sh './gradlew clean build'
             }
         }
 
