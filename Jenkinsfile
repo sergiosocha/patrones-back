@@ -48,16 +48,15 @@ pipeline {
 
         stage('Update Helm Chart') {
             steps {
-                
-                sh '''
-                docker run --rm -v "$(pwd)":/workdir mikefarah/yq eval '.image.repository = "sergios21/patrones-api"' -i values.yaml
-                '''
-                
-                sh '''
-                docker run --rm -v "$(pwd)":/workdir mikefarah/yq eval '.image.tag = "latest"' -i values.yaml
-                '''
+                dir('api-chart') {
+                    sh '''
+                    docker run --rm -v "$(pwd)":/workdir mikefarah/yq eval '.image.repository = "sergios21/patrones-api"' -i values.yaml
+                    docker run --rm -v "$(pwd)":/workdir mikefarah/yq eval '.image.tag = "latest"' -i values.yaml
+                    '''
+                }
             }
         }
+
 
         stage('Package Helm Chart') {
             steps {
