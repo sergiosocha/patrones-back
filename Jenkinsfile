@@ -83,17 +83,18 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'HelmRepoCreds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     script {
          
-                        sh 'rm -rf helm-repo'
-                        sh 'git clone https://github.com/sergiosocha/api-chart-tgz.git helm-repo'
-        
-                         cp api-chart-0.1.0.tgz helm-repo/charts/
-                        
-                          # Moverte dentro del repositorio clonado
+                        sh '''
+                          rm -rf helm-repo
+                          git clone https://github.com/sergiosocha/api-chart-tgz.git helm-repo
+                          cp "api-chart-0.1.0.tgz" helm-repo/charts/
                           cd helm-repo
-                                               
+                          git config user.name "jenkins-bot"
+                          git config user.email "jenkins@example.com"
                           git add .
                           git commit -m "Actualiza Chart"
                           git push
+                        '''
+
                     }
                 }
             }
