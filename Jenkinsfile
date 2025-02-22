@@ -40,7 +40,7 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'HelmRepoCreds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh 'rm -rf api-chart'
-                    sh 'git clone https://${USERNAME}:${PASSWORD}@github.com/sergiosocha/api-chart.git'
+                    sh 'git clone https://github.com/sergiosocha/api-chart.git'
                 }
             }
         }
