@@ -79,25 +79,25 @@ pipeline {
         }
 
         stage('Push Helm Chart') {
-    steps {
-        withCredentials([usernamePassword(credentialsId: 'HelmRepoCreds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-            script {
- 
-                sh 'rm -rf helm-repo'
-                sh 'git clone https://${USERNAME}:${PASSWORD}@github.com/sergiosocha/api-chart-tgz helm-repo'
-
-                sh 'cp *.tgz helm-repo/charts/'
-
-                sh '''
-                  cd ../..
-                  git add .
-                  git commit -m "Actualiza chart.tgz"
-                  git push
-                '''
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'HelmRepoCreds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    script {
+         
+                        sh 'rm -rf helm-repo'
+                        sh 'git clone https://github.com/sergiosocha/api-chart-tgz.git helm-repo'
+        
+                        sh 'cp *.tgz helm-repo/charts/'
+        
+                        sh '''
+                          cd ../..
+                          git add .
+                          git commit -m "Actualiza chart.tgz"
+                          git push
+                        '''
+                    }
+                }
             }
         }
-    }
-}
 
 
         stage('Update ArgoCD Manifest') {
