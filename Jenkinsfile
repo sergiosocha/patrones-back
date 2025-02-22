@@ -82,7 +82,6 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'HelmRepoCreds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     script {
-         
                         sh '''
                           rm -rf helm-repo
                           git clone https://github.com/sergiosocha/api-chart-tgz.git helm-repo
@@ -90,14 +89,11 @@ pipeline {
                           cd helm-repo
                           git config user.name "jenkins-bot"
                           git config user.email "jenkins@example.com"
-                          # Configuramos el helper para que use un archivo de credenciales en el repositorio
-                          git config credential.helper store
-                          echo "https://${USERNAME}:${PASSWORD}@github.com" > .git/credentials
+                          git config credential.helper '!f() { echo "username=${USERNAME}"; echo "password=${PASSWORD}"; }; f'
                           git add .
                           git commit -m "Actualiza Chart"
                           git push
                         '''
-
                     }
                 }
             }
