@@ -28,7 +28,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
 
-                withCredentials([usernamePassword(credentialsId: 'DOCKER', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'Dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh "docker login -u $DOCKER_USER -p $DOCKER_PASSWORD"
                     sh 'docker push sergioss21/patrones-api'
                 }
